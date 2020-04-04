@@ -12,7 +12,7 @@ const ROUTE = {
   home: '/',
   profile: '/profile',
 }
-const NAME = '@dkh-dev/reduxify'
+const NAME = '@dkh-dev/reduxie'
 
 test('store without middlewares', t => {
   // slice/router.js

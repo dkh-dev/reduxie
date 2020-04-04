@@ -1,5 +1,5 @@
 {
-  "name": "@dkh-dev/reduxify",
+  "name": "@dkh-dev/reduxie",
   "version": "1.0.0",
   "description": "A redux toolkit for simple use cases",
   "main": "index.js",
@@ -18,10 +18,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/dkh-dev/reduxify.git"
+    "url": "git+ssh://git@github.com/dkh-dev/reduxie.git"
   },
   "keywords": [
-    "reduxify",
+    "reduxie",
     "redux",
     "toolkit",
     "slice"
@@ -29,7 +29,7 @@
   "author": "Hoang <dangkyokhoang@gmail.com> (https://dangkyokhoang.github.io/)",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/dkh-dev/reduxify/issues"
+    "url": "https://github.com/dkh-dev/reduxie/issues"
   },
-  "homepage": "https://github.com/dkh-dev/reduxify#readme"
+  "homepage": "https://github.com/dkh-dev/reduxie#readme"
 }

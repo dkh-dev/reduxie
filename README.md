@@ -1,4 +1,4 @@
-# @dkh-dev/reduxify
+# @dkh-dev/reduxie
 
 _A redux toolkit for simple use cases_
 
@@ -14,7 +14,7 @@ _A redux toolkit for simple use cases_
 `redux/slice/profile.js`
 
 ```javascript
-import { createSlice } from '@dkh-dev/reduxify'
+import { createSlice } from '@dkh-dev/reduxie'
 
 const { slice, selectors, actions } = createSlice('profile', {
   name: null,
@@ -28,7 +28,7 @@ export const { setName } = actions
 `redux/store.js`
 
 ```javascript
-import { configureStore } from '@dkh-dev/reduxify'
+import { configureStore } from '@dkh-dev/reduxie'
 import thunk from 'redux-thunk'
 import profile from './slice/profile'
 
