@@ -1,0 +1,35 @@
+{
+  "name": "@dkh-dev/reduxify",
+  "version": "1.0.0",
+  "description": "A redux toolkit for simple use cases",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test",
+    "prepublishOnly": "npm test"
+  },
+  "devDependencies": {
+    "@dkh-dev/eslint-config": "^1.5.0",
+    "redux": "^4.0.5",
+    "redux-thunk": "^2.3.0",
+    "tape": "^4.13.2"
+  },
+  "peerDependencies": {
+    "redux": "^4.0.5"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/dkh-dev/reduxify.git"
+  },
+  "keywords": [
+    "reduxify",
+    "redux",
+    "toolkit",
+    "slice"
+  ],
+  "author": "Hoang <dangkyokhoang@gmail.com> (https://dangkyokhoang.github.io/)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dkh-dev/reduxify/issues"
+  },
+  "homepage": "https://github.com/dkh-dev/reduxify#readme"
+}
