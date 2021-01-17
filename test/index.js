@@ -93,7 +93,7 @@ test('replacing reducer', t => {
   } = configureStore({ slices: [ router ] })
 
   t.equal(getRoute(getState()), HOME)
-  t.throws(() => getName(getState()), `slice profile hasn't been added to the store`)
+  t.equal(getName(getState()), void 0, `slice profile hasn't been added to the store`)
 
   replaceReducer(combineSlices([ router, profile ]))
 
