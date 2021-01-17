@@ -1,6 +1,6 @@
 {
   "name": "@dkh-dev/reduxie",
-  "version": "1.1.5",
+  "version": "1.1.6",
   "description": "A redux toolkit for simple use cases",
   "files": [
     "index.js"

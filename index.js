@@ -5,12 +5,16 @@ const { combineReducers, createStore, applyMiddleware } = require('redux')
 
 const capitalize = string => string[ 0 ].toUpperCase() + string.slice(1)
 
-const composeWithDevTools = enhancer => {
+const compose = enhancer => {
   const compose = typeof window !== 'undefined'
     ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
     : null
 
-  return compose ? compose(enhancer) : enhancer
+  if (!compose) {
+    return enhancer
+  }
+
+  return enhancer ? compose(enhancer) : compose()
 }
 
 
@@ -117,7 +121,7 @@ const configureStore = ({ slices, middlewares }) => {
   const reducer = combineSlices(slices)
   const enhancer = middlewares ? applyMiddleware(...middlewares) : void 0
 
-  return createStore(reducer, enhancer && composeWithDevTools(enhancer))
+  return createStore(reducer, compose(enhancer))
 }
 
 module.exports = {
