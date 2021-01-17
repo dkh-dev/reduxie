@@ -3,7 +3,7 @@
 const test = require('tape')
 const { default: thunk } = require('redux-thunk')
 
-const { createSlice, configureStore } = require('..')
+const { createSlice, configureStore, combineSlices } = require('..')
 
 
 // routes
@@ -71,6 +71,36 @@ test('store with redux-thunk', t => {
   dispatch(login('username:password'))
 
   t.equal(getRoute(getState()), PROFILE)
+
+  t.end()
+})
+
+test('replacing reducer', t => {
+  const {
+    slice: router,
+    actions: { setRoute },
+    selectors: { getRoute },
+  } = createSlice('router', { route: HOME })
+  const {
+    slice: profile,
+    selectors: { getName },
+  } = createSlice('profile', { name: NAME })
+
+  const {
+    getState,
+    dispatch,
+    replaceReducer,
+  } = configureStore({ slices: [ router ] })
+
+  t.equal(getRoute(getState()), HOME)
+  t.throws(() => getName(getState()), `slice profile hasn't been added to the store`)
+
+  replaceReducer(combineSlices([ router, profile ]))
+
+  dispatch(setRoute(PROFILE))
+
+  t.equal(getRoute(getState()), PROFILE)
+  t.equal(getName(getState()), NAME, `slice profile has just been added to the store`)
 
   t.end()
 })

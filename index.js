@@ -49,7 +49,13 @@ const createActionCreators = (sliceName, keys) => {
 const createSelectors = (sliceName, keys) => Object.fromEntries(
   keys.map(key => [
     `get${ capitalize(key) }`,
-    state => state[ sliceName ][ key ],
+    state => {
+      if (!state.hasOwnProperty(sliceName)) {
+        throw Error(`slice ${ sliceName } does not exist`)
+      }
+
+      return state[ sliceName ][ key ]
+    },
   ]),
 )
 
