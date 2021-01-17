@@ -118,5 +118,6 @@ const configureStore = ({ slices, middlewares }) => {
 
 module.exports = {
   createSlice,
+  combineSlices,
   configureStore,
 }

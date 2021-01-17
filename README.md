@@ -6,7 +6,8 @@ _A redux toolkit for simple use cases_
 
 > Why all these reinventing the wheel?
 >
-> [@reduxjs/toolkit](https://github.com/reduxjs/redux-toolkit) makes use of [immer](https://github.com/immerjs/immer), which isn't very useful when the project is relatively small. This utility instead encourages the use of setter-only action creators.  
+> [@reduxjs/toolkit](https://github.com/reduxjs/redux-toolkit) makes use of [immer](https://github.com/immerjs/immer), which isn't very useful when the project is relatively small. This utility instead encourages the use of setter-only action creators.
+>
 > [@reduxjs/toolkit](https://github.com/reduxjs/redux-toolkit) also comes with default middlewares that cause poor performance when dispatching large objects (in development only, but still bad).
 
 ## Example
@@ -21,7 +22,7 @@ const { slice, selectors, actions } = createSlice('profile', {
 })
 
 export default slice
-export const { nameSelector } = selectors
+export const { getName } = selectors
 export const { setName } = actions
 ```
 
@@ -46,8 +47,8 @@ export default store
 import api from '../api'
 import { setName } from './slice/profile'
 
-export const doLogIn = credential => async dispatch => {
-  const user = await api('/login', credential)
+export const login = credentials => async dispatch => {
+  const user = await api('/login', credentials)
 
   // on logged in
   dispatch(setName(user.name))
@@ -76,13 +77,13 @@ export default Profile
 import React from 'react'
 import { useDispatch } from 'react-redux'
 import LoginForm from './login-form'
-import { doLogIn } from '../redux/actions'
+import { login } from '../redux/actions'
 
 const Login = () => {
   const dispatch = useDispatch()
 
   const handleSubmit = (username, password) => {
-    dispatch(doLogIn(username, password))
+    dispatch(login({ username, password }))
   }
 
   return <LoginForm onSubmit={ handleSubmit } />
