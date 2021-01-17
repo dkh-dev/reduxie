@@ -119,7 +119,7 @@ const configureStore = ({ slices, middlewares }) => {
   const reducer = combineSlices(slices)
   const enhancer = middlewares ? applyMiddleware(...middlewares) : void 0
 
-  return createStore(reducer, composeWithDevTools(enhancer))
+  return createStore(reducer, enhancer && composeWithDevTools(enhancer))
 }
 
 module.exports = {
