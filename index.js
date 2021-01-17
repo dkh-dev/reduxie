@@ -5,35 +5,35 @@ const { combineReducers, createStore, applyMiddleware } = require('redux')
 
 const capitalize = string => string[ 0 ].toUpperCase() + string.slice(1)
 
-const composeWithVoid = enhancer => enhancer
+const composeWithDevTools = enhancer => {
+  const compose = typeof window !== 'undefined'
+    ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
+    : null
 
-/**
- * @type {function}
- */
-const composeWithDevTools = (
-  typeof window !== 'undefined'
-    ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || composeWithVoid
-    : composeWithVoid
-)
+  return compose ? compose(enhancer) : enhancer
+}
+
 
 const createActionCreator = type => payload => ({ type, payload })
 
 /**
- * Creates an action type and setter-only action creator for each of the keys in
- *   `initialState`.
+ * Creates an action type and setter-only action creator for each of the keys
+ *   of the slice.
  * @param {string} sliceName
- * @param {object} initialState
+ * @param {string[]} keys
  */
-const createActionCreators = (sliceName, initialState) => {
+const createActionCreators = (sliceName, keys) => {
   // action creator names
-  const names = Object.keys(initialState).map(key => `set${ capitalize(key) }`)
+  const names = keys.map(key => `set${ capitalize(key) }`)
   // action types
   const types = names.map(name => `${ sliceName }/${ name }`)
 
-  const actions = Object.fromEntries(names.map((name, index) => [
-    name,
-    createActionCreator(types[ index ]),
-  ]))
+  const actions = Object.fromEntries(
+    names.map((name, index) => [
+      name,
+      createActionCreator(types[ index ]),
+    ]),
+  )
 
   return {
     types,
@@ -42,26 +42,26 @@ const createActionCreators = (sliceName, initialState) => {
 }
 
 /**
- * Create a selector for each of the keys in `initialState`.
+ * Create a selector for each of the keys of the slice.
  * @param {string} sliceName
- * @param {object} initialState
+ * @param {string[]} keys
  */
-const createSelectors = (sliceName, initialState) => Object.fromEntries(
-  Object.keys(initialState).map(key => [
-    `${ key }Selector`,
+const createSelectors = (sliceName, keys) => Object.fromEntries(
+  keys.map(key => [
+    `get${ capitalize(key) }`,
     state => state[ sliceName ][ key ],
   ]),
 )
 
 /**
- * Create a reducer from action `types` and `initialState`.
- * Notice: `types` and `initialState` keys must be in a same iteration order.
+ * Create a reducer from entries of the slice's initial state and their
+ *   corresponding setter action types.
+ * @param {array[]} entries
  * @param {string[]} types
- * @param {object} initialState
  */
-const createReducer = (types, initialState) => {
+const createReducer = (entries, types) => {
   const reducers = Object.fromEntries(
-    Object.entries(initialState).map(([ key, initialValue ], index) => {
+    entries.map(([ key, initialValue ], index) => {
       const type = types[ index ]
 
       return [
@@ -82,9 +82,12 @@ const createReducer = (types, initialState) => {
  * @param {object} initialState
  */
 const createSlice = (sliceName, initialState) => {
-  const { types, actions } = createActionCreators(sliceName, initialState)
-  const selectors = createSelectors(sliceName, initialState)
-  const reducer = createReducer(types, initialState)
+  const keys = Object.keys(initialState)
+  const entries = Object.entries(initialState)
+
+  const { types, actions } = createActionCreators(sliceName, keys)
+  const selectors = createSelectors(sliceName, keys)
+  const reducer = createReducer(entries, types)
   const slice = { [ sliceName ]: reducer }
 
   return {
@@ -114,10 +117,6 @@ const configureStore = ({ slices, middlewares }) => {
 }
 
 module.exports = {
-  createActionCreators,
-  createSelectors,
-  createReducer,
   createSlice,
-  combineSlices,
   configureStore,
 }

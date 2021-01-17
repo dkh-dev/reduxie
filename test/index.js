@@ -1,78 +1,76 @@
 'use strict'
 
-/* eslint-disable max-statements */
-
 const test = require('tape')
 const { default: thunk } = require('redux-thunk')
 
 const { createSlice, configureStore } = require('..')
 
 
-const ROUTE = {
-  home: '/',
-  profile: '/profile',
-}
+// routes
+const HOME = '/'
+const PROFILE = '/profile'
+// user
 const NAME = '@dkh-dev/reduxie'
+
 
 test('store without middlewares', t => {
   // slice/router.js
-  const router = createSlice('router', {
-    route: ROUTE.home,
-  })
-  const routerSlice = router.slice
-  const { setRoute } = router.actions
-  const { routeSelector } = router.selectors
+  const {
+    slice: router,
+    actions: { setRoute },
+    selectors: { getRoute },
+  } = createSlice('router', { route: HOME })
 
   // slice/profile.js
-  const profile = createSlice('profile', {
-    name: null,
-  })
-  const profileSlice = profile.slice
-  const { setName } = profile.actions
-  const { nameSelector } = profile.selectors
+  const {
+    slice: profile,
+    actions: { setName },
+    selectors: { getName },
+  } = createSlice('profile', { name: null })
 
   const { getState, dispatch } = configureStore({
-    slices: [ routerSlice, profileSlice ],
+    slices: [ router, profile ],
   })
 
-  t.equal(routeSelector(getState()), ROUTE.home)
-  t.equal(nameSelector(getState()), null)
+
+  t.equal(getRoute(getState()), HOME)
+  t.equal(getName(getState()), null)
 
   // on user logged in
-  dispatch(setRoute(ROUTE.profile))
+  dispatch(setRoute(PROFILE))
   dispatch(setName(NAME))
 
-  t.equal(routeSelector(getState()), ROUTE.profile)
-  t.equal(nameSelector(getState()), NAME)
+  t.equal(getRoute(getState()), PROFILE)
+  t.equal(getName(getState()), NAME)
 
   t.end()
 })
 
 test('store with redux-thunk', t => {
-  const { slice, actions, selectors } = createSlice('router', {
-    route: ROUTE.home,
-  })
-  const { setRoute } = actions
-  const { routeSelector } = selectors
+  const {
+    slice,
+    actions: { setRoute },
+    selectors: { getRoute },
+  } = createSlice('router', { route: HOME })
 
   const { getState, dispatch } = configureStore({
     slices: [ slice ],
     middlewares: [ thunk ],
   })
 
-  const doLogin = credentials => dispatch => {
-    // await login(credentials)
+  const login = credentials => dispatch => {
+    // await verify(credentials)
     t.ok(credentials)
 
     // on successful login, navigate to profile page
-    dispatch(setRoute(ROUTE.profile))
+    dispatch(setRoute(PROFILE))
   }
 
-  t.equal(routeSelector(getState()), ROUTE.home)
+  t.equal(getRoute(getState()), HOME)
 
-  dispatch(doLogin('username:password'))
+  dispatch(login('username:password'))
 
-  t.equal(routeSelector(getState()), ROUTE.profile)
+  t.equal(getRoute(getState()), PROFILE)
 
   t.end()
 })
